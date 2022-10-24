@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/menu_top">
+
+        <item
+            android:id="@+id/nav_my_notepacks"
+            android:icon="@drawable/my_notepacks"
+            android:title="@string/menu_notepacks"
+            android:checked="true"/>
+
+        <item
+            android:id="@+id/nav_create_notepack"
+            android:icon="@drawable/create_notepack"
+            android:title="@string/menu_create_notepack"
+            android:checkable="false"/>
+
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/menu_bottom">
+
+        <item
+            android:id="@+id/nav_language"
+            android:icon="@drawable/ic_baseline_language_24"
+            android:title="@string/menu_language"
+            android:checkable="false"/>
+
+        <item
+            android:id="@+id/nav_contacts"
+            android:icon="@drawable/contacts"
+            android:title="@string/menu_contacts"
+            android:checkable="false"/>
+
+        <item
+            android:id="@+id/nav_info"
+            android:icon="@drawable/ic_baseline_info_24"
+            android:title="@string/menu_info"
+            android:checkable="false"/>
+
+    </group>
+</menu>

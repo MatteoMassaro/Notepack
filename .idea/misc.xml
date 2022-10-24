@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1555" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/drawable/arrow_left.xml" value="0.1555" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/drawable/button_neutral_background.xml" value="0.1555" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/drawable/button_warning_background.xml" value="0.1555" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/drawable/circle.xml" value="0.1555" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/drawable/cursor.xml" value="0.1555" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/drawable/dashed.xml" value="0.1555" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/drawable/dialog_background.xml" value="0.1555" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/drawable/divider.xml" value="0.1555" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/drawable/drawer_item.xml" value="0.1555" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/drawable/grid_layout_background.xml" value="0.1555" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/drawable/ic_baseline_arrow_drop_down_circle_24.xml" value="0.1555" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/drawable/ic_menu_camera.xml" value="0.1555" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/drawable/ic_menu_slideshow.xml" value="0.1555" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/drawable/menu_dialog_background.xml" value="0.1555" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/drawable/menu_dialog_divider.xml" value="0.1555" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/drawable/note_background.xml" value="0.1555" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/drawable/side_nav_bar.xml" value="0.1555" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/drawable/spinner.xml" value="0.1555" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/drawable/thumb.xml" value="0.1555" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/drawable/toast_background.xml" value="0.1555" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/drawable/track.xml" value="0.1555" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/drawable/warning_background.xml" value="0.1555" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/font/font_main.xml" value="0.27487179487179486" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/activity_main.xml" value="0.12158054711246201" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/activity_main2.xml" value="0.176" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/activity_splash_screen.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/add_notepack_text.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/app_bar_main.xml" value="0.176" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/app_bar_main2.xml" value="0.176" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/cardview.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/category.xml" value="0.176" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/category_business_trip.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/contacts_dialog.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/content_main.xml" value="0.12158054711246201" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/content_main2.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/crea_nota_fragment.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/create_note_fragment.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/create_notepack_dialog.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/create_notepack_fragment.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/empty_view.xml" value="0.10989583333333333" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/fragment_gallery.xml" value="0.176" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/fragment_home.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/fragment_slideshow.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/info_dialog.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/info_fragment.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/language_dialog.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/layout_error_dialog.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/layout_warning_dialog.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/nav_header_main.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/nav_header_main2.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/note.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/note_fragment.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/notepack.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/notepack_fragment.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/notepack_item.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/layout/toast.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/menu/activity_main_drawer.xml" value="0.24615384615384617" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/menu/main.xml" value="0.25" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/menu/order_popup_menu.xml" value="0.24537037037037038" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/menu/popup_menu.xml" value="0.25" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1555" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Notepack/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1555" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

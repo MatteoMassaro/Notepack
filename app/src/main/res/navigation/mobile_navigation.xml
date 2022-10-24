@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_my_notepacks">
+
+    <fragment
+        android:id="@+id/nav_my_notepacks"
+        android:name="com.example.notepack.ui.notepack.NotepackFragment"
+        android:label="@string/menu_notepacks"
+        tools:layout="@layout/notepack_fragment" >
+        <action
+            android:id="@+id/action_nav_my_notes_to_nav_create_notepack"
+            app:destination="@id/nav_create_notepack" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_create_notepack"
+        android:name="com.example.notepack.ui.notepack.CreateNotepackFragment"
+        android:label="@string/menu_create_notepack"
+        tools:layout="@layout/create_notepack_fragment" >
+        <action
+            android:id="@+id/action_nav_create_note_to_nav_my_notepacks"
+            app:destination="@id/nav_my_notepacks" />
+    </fragment>
+</navigation>
