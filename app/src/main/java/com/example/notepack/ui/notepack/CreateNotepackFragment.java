@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +18,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.appcompat.widget.Toolbar;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.example.notepack.MainActivity;
@@ -32,6 +32,9 @@ import com.example.notepack.ui.category.Data;
 import com.example.notepack.ui.database.DBHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CreateNotepackFragment extends Fragment {
 
@@ -51,13 +54,14 @@ public class CreateNotepackFragment extends Fragment {
     String notepackTitle, notepackCategory, itemTitle;
     SwitchCompat switchTaken;
     TextInputEditText insertTitle, insertItemText;
-    TextView itemsTakenText;
+    TextView itemsTakenText, text;
     TextWatcher titleTextWatcher, itemTextWatcher;
     Toolbar toolbar;
     View itemView;
+    Toast toast;
     View.OnClickListener switchListener, deleteFabListener;
 
-    int itemsTakenCounter, itemCategory, taken, notepacksCounter, notepackId;
+    int itemsTakenCounter, initializedItemsCunter, itemCategory, taken, notepacksCounter, notepackId;
     
     public static Boolean saved;
     public static int itemsCounter;
@@ -85,6 +89,12 @@ public class CreateNotepackFragment extends Fragment {
         notepackTitleEmpty = true;
         handler = new Handler();
         DB = new DBHelper(getContext());
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.toast, null);
+        text = (TextView) layout.findViewById(R.id.text);
+        toast = new Toast(getContext());
+        toast.setView(layout);
+        List<Integer> itemsIds = new ArrayList<>();
 
         //Disattivazione del pulsante di salvataggio della Notepack
         saveBtn.setEnabled(false);
@@ -131,15 +141,14 @@ public class CreateNotepackFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
         //Inizializzazione delle variabili
         toolbar = getActivity().findViewById(R.id.toolbar);
         newItemCreated = false;
         newItemDeleted = false;
         saveNotepackItems = false;
         saved = true;
-        Cursor cursor1 = DB.getNotepacksNumber();
-        cursor1.moveToFirst();
+        Cursor cursor1 = DB.getNotepacksId();
+
 
         //Settaggio dell'icona di navigazione della toolbar
         toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
@@ -152,38 +161,47 @@ public class CreateNotepackFragment extends Fragment {
 
         //Settaggio della Notepack dal database in base allo stato salvato
         if(!MainActivity.newNotepackCreated) {
-            notepacksCounter = cursor1.getInt(0);
-            Cursor cursor2 = DB.getNotepacksId(MainActivity.animationText.getText().toString());
-            cursor2.moveToFirst();
-            notepackId = cursor2.getInt(0);
-            Cursor cursor3 = DB.getItemsNumber(notepackId);
-            cursor3.moveToFirst();
-            itemsCounter = cursor3.getInt(0);
-            Cursor cursor4 = DB.getNotepacksItemsTaken(notepackId);
-            cursor4.moveToFirst();
-            itemsTakenCounter = cursor4.getInt(0);
+            Cursor cursor2 = DB.getNotepacksIdByTitle(MainActivity.animationText.getText().toString());
+            if(cursor2 != null && cursor2.moveToFirst()) {
+                notepackId = cursor2.getInt(0);
+            }else{
+                text.setText(getString(R.string.database_error));
+                toast.show();
+            }
+            Cursor cursor3 = DB.getItemsNumberById(notepackId);
+            if(cursor3 != null && cursor3.moveToFirst()) {
+                itemsCounter = cursor3.getInt(0);
+            }else{
+                text.setText(getString(R.string.database_error));
+                toast.show();
+            }
+            Cursor cursor4 = DB.getNotepacksDetailsItemsTakenById(notepackId);
+            if(cursor4!= null && cursor4.moveToFirst()) {
+                itemsTakenCounter = cursor4.getInt(0);
+            }else{
+                text.setText(getString(R.string.database_error));
+                toast.show();
+            }
             notepackTitleEmpty = false;
             notepackStateRestored = true;
             itemLinearLayout.removeAllViews();
             setNotepackDetailsFromDatabase();
         }else{
-            notepacksCounter = cursor1.getInt(0);
+            if(cursor1 != null && cursor1.moveToLast()){
+                notepacksCounter = cursor1.getInt(0) + 1;
+            }else{
+                notepacksCounter = 0;
+                text.setText(getString(R.string.database_error));
+                toast.show();
+            }
             notepackId = notepacksCounter;
             itemsCounter = 0;
             itemsTakenCounter = 0;
             notepackStateRestored = false;
-            DB.saveItemsNumber(notepacksCounter, itemsCounter);
         }
 
         //Settaggio del testo degli items presi della Notepack
         itemsTakenText.setText(new StringBuilder().append(getString(R.string.items_taken_text1)).append(itemsTakenCounter).append(getString(R.string.items_taken_text2)).append(itemsCounter).toString());
-
-        //Settaggio della visibilità del testo degli items presi della Notepack
-        if(itemsCounter != 0){
-            itemsTakenText.setVisibility(View.VISIBLE);
-        }else{
-            itemsTakenText.setVisibility(View.INVISIBLE);
-        }
 
         //Settaggio dell'immagine della categoria della Notepack
         switch (MainActivity.notepackCategory) {
@@ -276,9 +294,9 @@ public class CreateNotepackFragment extends Fragment {
         selectCategoryAdapter = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                initializedItemsCunter++;
                 view.findViewById(R.id.name).setVisibility(View.GONE);
-
-                if(!insertItemText.getText().toString().isEmpty() && !insertItemText.getText().toString().startsWith(" ") && !insertItemText.getText().toString().endsWith(" ") && !notepackTitleEmpty && !notepackStateRestored){
+                if(!insertItemText.getText().toString().isEmpty() && !insertItemText.getText().toString().startsWith(" ") && !insertItemText.getText().toString().endsWith(" ") && !notepackTitleEmpty && initializedItemsCunter > itemsCounter){
                     saved = false;
                     saveBtn.setEnabled(true);
                     saveBtn.setBackgroundColor(getResources().getColor(R.color.lime_green));
@@ -350,7 +368,7 @@ public class CreateNotepackFragment extends Fragment {
                     itemCategory = selectCategorySpinner.getSelectedItemPosition();
                     itemTitle = insertItemText.getText().toString();
 
-                    Cursor cursor = DB.getItemsTitle(notepackId);
+                    Cursor cursor = DB.getItemsTitleById(notepackId);
                     cursor.moveToPosition(i);
 
                     if(switchTaken.isChecked()){
@@ -376,7 +394,6 @@ public class CreateNotepackFragment extends Fragment {
 
                 if(itemsCounter == 0 && newItemDeleted){
                     DB.updateItemsNumber(notepackId, 0);
-                    itemsTakenText.setVisibility(View.INVISIBLE);
                 }
 
                 newItemCreated = false;
@@ -384,8 +401,7 @@ public class CreateNotepackFragment extends Fragment {
 
                 //Salvataggio e aggiornamento della Notepack
                 if(MainActivity.newNotepackCreated) {
-                    saveNotepacksDetails = DB.saveNotepacksDetails(notepackId, notepackTitle, notepackCategory, itemsTakenCounter);
-                    DB.saveItemsNumber(notepackId, itemsCounter);
+                    saveNotepacksDetails = DB.saveNotepacksDetails(notepackId, notepackTitle, notepackCategory, itemsCounter, itemsTakenCounter);
                     updateNotepacksDetails = false;
                 }else{
                     updateNotepacksDetails = DB.updateNotepacksDetails(notepackId, notepackTitle, itemsTakenCounter);
@@ -425,6 +441,7 @@ public class CreateNotepackFragment extends Fragment {
             public void onClick(View view) {
                 //Inizializzazione delle variabili
                 newItemCreated = true;
+                newItemDeleted = false;
                 itemView = getLayoutInflater().inflate(R.layout.notepack_item, null);
                 itemLinearLayout.addView(itemView, itemsCounter);
                 insertItemText = itemView.findViewById(R.id.insertItemText);
@@ -438,9 +455,6 @@ public class CreateNotepackFragment extends Fragment {
                 //Disattivazione pulsante di salvataggio della Notepack
                 saveBtn.setEnabled(false);
                 saveBtn.setBackgroundColor(getResources().getColor(R.color.gray));
-
-                //Settaggio della visibilità del testo degli items presi della Notepack
-                itemsTakenText.setVisibility(View.VISIBLE);
 
                 //Settaggio del listener del testo di ciascun item della Notepack
                 setItemTextListener();
@@ -482,7 +496,7 @@ public class CreateNotepackFragment extends Fragment {
                 newItemDeleted = true;
 
                 //Attivazione del pulsante di salvataggio della Notepack
-                if(!newItemCreated && !notepackStateRestored) {
+                if(!newItemCreated) {
                     saved = false;
                     saveBtn.setEnabled(true);
                     saveBtn.setBackgroundColor(getResources().getColor(R.color.lime_green));
@@ -497,9 +511,9 @@ public class CreateNotepackFragment extends Fragment {
     //Settaggio delle Notepacks dal database
     public void setNotepackDetailsFromDatabase(){
         //Inizializzazione delle variabili
-        Cursor cursor1 = DB.getItemsCategory(notepackId);
-        Cursor cursor2 = DB.getItemsTitle(notepackId);
-        Cursor cursor3 = DB.getItemsTaken(notepackId);
+        Cursor cursor1 = DB.getItemsCategoryById(notepackId);
+        Cursor cursor2 = DB.getItemsTitleById(notepackId);
+        Cursor cursor3 = DB.getNotepacksItemsTakenById(notepackId);
 
         int i;
 
@@ -514,7 +528,8 @@ public class CreateNotepackFragment extends Fragment {
             selectCategorySpinner.setAdapter(categoryAdapter);
             switchTaken = itemLinearLayout.getChildAt(i).findViewById(R.id.switchTaken);
             deleteItemFab = itemLinearLayout.getChildAt(i).findViewById(R.id.deleteItemBtn);
-            Cursor cursor = DB.getItemsCategory(notepackId);
+            Cursor cursor = DB.getItemsCategoryById(notepackId);
+            Log.d("TAG", String.valueOf(notepackId));
             cursor.moveToPosition(i);
             itemCategory = cursor.getInt(0);
 
@@ -544,8 +559,6 @@ public class CreateNotepackFragment extends Fragment {
             //Settaggio del listener dello switch di ciascun item
             setSwitchListener();
         }
-
-        notepackStateRestored = false;
 
         //Settaggio del titolo della Notepack
         insertTitle.setText(MainActivity.animationText.getText().toString());

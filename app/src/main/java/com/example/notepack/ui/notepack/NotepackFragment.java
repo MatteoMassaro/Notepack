@@ -36,8 +36,9 @@ public class NotepackFragment extends Fragment {
     Toolbar toolbar;
     DrawerLayout drawerLayout;
     LinearLayout notepackLinearLayout;
-    TextView notepackTitle, itemsTaken;
+    TextView notepackTitle, itemsTaken, text;
     ImageView notepackImage;
+    Toast toast;
     Animation circleExplosion, textExplosion, circleImplosion, textImplosion;
     Handler handler;
     DBHelper DB;
@@ -58,6 +59,11 @@ public class NotepackFragment extends Fragment {
         //Inizializzazione delle variabili
         handler = new Handler();
         DB = new DBHelper(getContext());
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.toast, null);
+        text = (TextView) layout.findViewById(R.id.text);
+        toast = new Toast(getContext());
+        toast.setView(layout);
 
         //Settaggio delle animazioni
         circleExplosion = AnimationUtils.loadAnimation(getContext(), R.anim.circle_explosion_animation);
@@ -81,8 +87,12 @@ public class NotepackFragment extends Fragment {
         notepackLinearLayout = getActivity().findViewById(R.id.notepackLinearLayout);
         fab.show();
         Cursor cursor = DB.getNotepacksNumber();
-        cursor.moveToFirst();
-        notepacksCounter = cursor.getInt(0);
+        if(cursor != null && cursor.moveToFirst()) {
+            notepacksCounter = cursor.getInt(0);
+        }else{
+            text.setText(getString(R.string.database_error));
+            toast.show();
+        }
 
         //Controlli sulla toolbar
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -117,36 +127,56 @@ public class NotepackFragment extends Fragment {
             itemsTaken = notepackLinearLayout.getChildAt(i).findViewById(R.id.cardviewItemsTaken);
             Cursor cursor2 = null;
             Cursor cursor3 = null;
-            Cursor cursor4 = DB.getNotepacksItemsTaken(i);
-            Cursor cursor5 = DB.getItemsNumber(i);
-            cursor4.moveToFirst();
-            cursor5.moveToFirst();
+            Cursor cursor4 = null;
+            Cursor cursor5 = null;
 
             //Controllo sull'ordinamento delle Notepacks
             if(MainActivity.orderNotepacksById) {
                 cursor2 = DB.getNotepacksTitleOrderedById();
                 cursor3 = DB.getNotepacksCategoryOrderedById();
+                cursor4 = DB.getNotepacksItemsTakenOrderedById();
+                cursor5 = DB.getItemsNumberOrderedById();
             }else if(MainActivity.orderNotepacksByCategory){
                 cursor2 = DB.getNotepacksTitleOrderedByCategory();
                 cursor3 = DB.getNotepacksCategoryOrderedByCategory();
+                cursor4 = DB.getNotepacksItemsTakenOrderedByCategory();
+                cursor5 = DB.getItemsNumberOrderedByCategory();
             }else if(MainActivity.orderNotepacksByTitle){
                 cursor2 = DB.getNotepacksTitleOrderedByTitle();
                 cursor3 = DB.getNotepacksCategoryOrderedByTitle();
+                cursor4 = DB.getNotepacksItemsTakenOrderedByTitle();
+                cursor5 = DB.getItemsNumberOrderedByTitle();
             }
 
-            itemsTakenCounter = cursor4.getInt(0);
-            itemsCounter = cursor5.getInt(0);
+            if (cursor4 != null && cursor4.moveToFirst()) {
+                cursor4.moveToPosition(i);
+                itemsTakenCounter = cursor4.getInt(0);
+            }else{
+                text.setText(getString(R.string.database_error));
+                toast.show();
+            }
+
+            if (cursor5 != null && cursor5.moveToFirst()) {
+                cursor5.moveToPosition(i);
+                itemsCounter = cursor5.getInt(0);
+            }else{
+                text.setText(getString(R.string.database_error));
+                toast.show();
+            }
 
             //Settaggio del testo degli items presi della Notepack
             itemsTaken.setText(new StringBuilder().append(getString(R.string.items_taken_text)).append(itemsTakenCounter).append(getString(R.string.items_taken_text2)).append(itemsCounter).toString());
 
             //Settaggio del titolo della Notepack
-            if(cursor2.moveToPosition(i)){
+            if(cursor2 != null && cursor2.moveToPosition(i)){
                 notepackTitle.setText(cursor2.getString(0));
+            }else{
+                text.setText(getString(R.string.database_error));
+                toast.show();
             }
 
             //Settaggio dell'immagine della categoria della Notepack
-            if(cursor3.moveToPosition(i)){
+            if(cursor3 != null && cursor3.moveToPosition(i)){
                 if (cursor3.getString(0).equals("Vacanza")) {
                     notepackImage.setImageResource(R.drawable.vacation);
                 }else if(cursor3.getString(0).equals("Viaggio di lavoro")){
@@ -156,26 +186,24 @@ public class NotepackFragment extends Fragment {
                 }else if(cursor3.getString(0).equals("Personalizzato")){
                     notepackImage.setImageResource(R.drawable.custom);
                 }
+            }else{
+                text.setText(getString(R.string.database_error));
+                toast.show();
             }
 
             //Settaggio della rimozione della Notepack
-            manageNotepack(i, cursor2, cursor3);
+            manageNotepack(i, notepackTitle.getText().toString(), cursor2, cursor3);
         }
 
     }
 
     //Rimozione della Notepack
-    public void manageNotepack(int i, Cursor cursor1, Cursor cursor2){
+    public void manageNotepack(int  i, String notepackTitle, Cursor cursor1, Cursor cursor2){
         notepackLinearLayout.getChildAt(i).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 //Inizializzazione delle variabili
                 deleteNotepackFab = view.findViewById(R.id.deleteNotepackBtn);
-                LayoutInflater inflater = getLayoutInflater();
-                View layout = inflater.inflate(R.layout.toast, null);
-                TextView text = (TextView) layout.findViewById(R.id.text);
-                Toast toast = new Toast(getContext());
-                toast.setView(layout);
 
                 //Controlli sulla pressione del pulsante di rimozione della Notepack
                 if(deleteNotepackFab.getVisibility() == View.INVISIBLE) {
@@ -184,7 +212,7 @@ public class NotepackFragment extends Fragment {
                         @Override
                         public void onClick(View view) {
                             View view1 = (View) view.getParent();
-                            if (DB.deleteNotepacksDetails(i)) {
+                            if (DB.deleteNotepacksDetails(i, notepackTitle)) {
                                 text.setText(getString(R.string.notepack_deleted));
                                 toast.show();
                                 DB.decreaseNotepacksNumber();
@@ -195,8 +223,12 @@ public class NotepackFragment extends Fragment {
                                 toast.show();
                             }
                             Cursor cursor = DB.getNotepacksNumber();
-                            cursor.moveToFirst();
-                            notepacksCounter = cursor.getInt(0);
+                            if(cursor != null && cursor.moveToFirst()) {
+                                notepacksCounter = cursor.getInt(0);
+                            }else{
+                                text.setText(getString(R.string.database_error));
+                                toast.show();
+                            }
                             if(notepacksCounter == 0){
                                 View addNotepackHint = getLayoutInflater().inflate(R.layout.add_notepack_text, null);
                                 handler.postDelayed(() -> notepackLinearLayout.addView(addNotepackHint), 300);

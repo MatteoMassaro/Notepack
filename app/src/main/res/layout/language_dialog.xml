@@ -57,6 +57,15 @@
                     android:text="@string/italian"
                     android:textSize="25sp" />
 
+                <ImageView
+                    android:id="@+id/imageCheckItalian"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="end|center"
+                    android:layout_marginStart="100dp"
+                    android:layout_marginEnd="10dp"
+                    android:src="@drawable/check"
+                    android:visibility="gone"/>
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
@@ -100,6 +109,15 @@
                     android:text="@string/english"
                     android:textSize="25sp" />
 
+                <ImageView
+                    android:id="@+id/imageCheckEnglish"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="end|center"
+                    android:layout_marginStart="105dp"
+                    android:layout_marginEnd="10dp"
+                    android:src="@drawable/check"
+                    android:visibility="gone"/>
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
@@ -142,6 +160,16 @@
                     android:text="@string/french"
                     android:textSize="25sp" />
 
+                <ImageView
+                    android:id="@+id/imageCheckFrench"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="end|center"
+                    android:layout_marginStart="85dp"
+                    android:layout_marginEnd="10dp"
+                    android:src="@drawable/check"
+                    android:visibility="gone"/>
+
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
@@ -183,6 +211,16 @@
                     android:gravity="center"
                     android:text="@string/spanish"
                     android:textSize="25sp" />
+                <ImageView
+                    android:id="@+id/imageCheckSpanish"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="end|center"
+                    android:layout_marginStart="80dp"
+                    android:layout_marginEnd="10dp"
+                    android:src="@drawable/check"
+                    android:visibility="gone"/>
+
 
             </LinearLayout>
 
@@ -226,6 +264,16 @@
                     android:gravity="center"
                     android:text="@string/german"
                     android:textSize="25sp" />
+
+                <ImageView
+                    android:id="@+id/imageCheckGerman"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="end|center"
+                    android:layout_marginStart="95dp"
+                    android:layout_marginEnd="10dp"
+                    android:src="@drawable/check"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 

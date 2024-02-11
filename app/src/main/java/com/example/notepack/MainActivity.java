@@ -13,10 +13,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Menu;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -24,27 +24,26 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.notepack.databinding.ActivityMainBinding;
-import com.example.notepack.ui.database.DBHelper;
-import com.example.notepack.ui.notepack.CreateNotepackFragment;
-import com.example.notepack.ui.notepack.NotepackFragment;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.notepack.databinding.ActivityMainBinding;
+import com.example.notepack.ui.notepack.CreateNotepackFragment;
+import com.example.notepack.ui.notepack.NotepackFragment;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.Locale;
 
@@ -55,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
 
     Animation circleExplosion, textExplosion, circleImplosion, textImplosion;
     CardView cardViewVacation, cardViewBusinessTrip, cardViewSchoolTrip, cardViewCustom, cardViewItalian, cardViewEnglish, cardViewFrench, cardViewSpanish, cardViewGerman, cardViewInstagram, cardviewEmail, cardViewWebsite;
-    DBHelper DB;
     DrawerLayout drawerLayout;
     Handler handler;
     LinearLayout notepackLinearLayout;
@@ -64,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
     NavigationView navigationView;
     Toolbar toolbar;
     View circleVacation, circleBusinessTrip, circleSchoolTrip, circleCustom;
+
+    ImageView imageCheckItalian, imageCheckEnglish, imageCheckFrench, imageCheckSpanish, imageCheckGerman;
 
     int fabVisibilityCounter;
 
@@ -98,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
         circleSchoolTrip = binding.appBarMain.circleSchoolTrip;
         circleCustom = binding.appBarMain.circleCustom;
         toolbar = binding.appBarMain.toolbar;
-        DB = new DBHelper(this);
         handler = new Handler();
         fabVisibilityCounter = 0;
         goToNotepackFragmentCheck = false;
@@ -602,12 +601,36 @@ public class MainActivity extends AppCompatActivity {
         menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         menuDialog.show();
         SharedPreferences sharedPreferences = getSharedPreferences("Selected language", MODE_PRIVATE);
+        String languageCode = sharedPreferences.getString("Language","it");
         SharedPreferences.Editor editor = sharedPreferences.edit();
         cardViewItalian = menuDialog.findViewById(R.id.cardviewItalian);
         cardViewEnglish = menuDialog.findViewById(R.id.cardviewEnglish);
         cardViewFrench = menuDialog.findViewById(R.id.cardviewFrench);
         cardViewSpanish = menuDialog.findViewById(R.id.cardviewSpanish);
         cardViewGerman = menuDialog.findViewById(R.id.cardviewGerman);
+        imageCheckItalian = menuDialog.findViewById(R.id.imageCheckItalian);
+        imageCheckEnglish = menuDialog.findViewById(R.id.imageCheckEnglish);
+        imageCheckFrench = menuDialog.findViewById(R.id.imageCheckFrench);
+        imageCheckSpanish = menuDialog.findViewById(R.id.imageCheckSpanish);
+        imageCheckGerman = menuDialog.findViewById(R.id.imageCheckGerman);
+
+        switch(languageCode){
+            case "it":
+                imageCheckItalian.setVisibility(View.VISIBLE);
+                break;
+            case "en":
+                imageCheckEnglish.setVisibility(View.VISIBLE);
+                break;
+            case "fr":
+                imageCheckFrench.setVisibility(View.VISIBLE);
+                break;
+            case "es":
+                imageCheckSpanish.setVisibility(View.VISIBLE);
+                break;
+            case "de":
+                imageCheckGerman.setVisibility(View.VISIBLE);
+                break;
+        }
 
         //Settaggio della lingua italiana
         cardViewItalian.setOnClickListener(new View.OnClickListener() {
@@ -618,6 +641,11 @@ public class MainActivity extends AppCompatActivity {
                 setLanguage("it");
                 Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_content_main).navigate(R.id.nav_my_notepacks);
                 menuDialog.hide();
+                imageCheckItalian.setVisibility(View.VISIBLE);
+                imageCheckEnglish.setVisibility(View.GONE);
+                imageCheckFrench.setVisibility(View.GONE);
+                imageCheckSpanish.setVisibility(View.GONE);
+                imageCheckGerman.setVisibility(View.GONE);
             }
         });
 
@@ -630,6 +658,11 @@ public class MainActivity extends AppCompatActivity {
                 setLanguage("en");
                 Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_content_main).navigate(R.id.nav_my_notepacks);
                 menuDialog.hide();
+                imageCheckItalian.setVisibility(View.GONE);
+                imageCheckEnglish.setVisibility(View.VISIBLE);
+                imageCheckFrench.setVisibility(View.GONE);
+                imageCheckSpanish.setVisibility(View.GONE);
+                imageCheckGerman.setVisibility(View.GONE);
             }
         });
 
@@ -642,6 +675,11 @@ public class MainActivity extends AppCompatActivity {
                 setLanguage("fr");
                 Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_content_main).navigate(R.id.nav_my_notepacks);
                 menuDialog.hide();
+                imageCheckItalian.setVisibility(View.GONE);
+                imageCheckEnglish.setVisibility(View.GONE);
+                imageCheckFrench.setVisibility(View.VISIBLE);
+                imageCheckSpanish.setVisibility(View.GONE);
+                imageCheckGerman.setVisibility(View.GONE);
             }
         });
 
@@ -654,6 +692,11 @@ public class MainActivity extends AppCompatActivity {
                 setLanguage("es");
                 Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_content_main).navigate(R.id.nav_my_notepacks);
                 menuDialog.hide();
+                imageCheckItalian.setVisibility(View.GONE);
+                imageCheckEnglish.setVisibility(View.GONE);
+                imageCheckFrench.setVisibility(View.GONE);
+                imageCheckSpanish.setVisibility(View.VISIBLE);
+                imageCheckGerman.setVisibility(View.GONE);
             }
         });
 
@@ -666,6 +709,11 @@ public class MainActivity extends AppCompatActivity {
                 setLanguage("de");
                 Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_content_main).navigate(R.id.nav_my_notepacks);
                 menuDialog.hide();
+                imageCheckItalian.setVisibility(View.GONE);
+                imageCheckEnglish.setVisibility(View.GONE);
+                imageCheckFrench.setVisibility(View.GONE);
+                imageCheckSpanish.setVisibility(View.GONE);
+                imageCheckGerman.setVisibility(View.VISIBLE);
             }
         });
 
@@ -758,7 +806,6 @@ public class MainActivity extends AppCompatActivity {
         Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_content_main).navigate(R.id.nav_my_notepacks);
         navigationView.getMenu().clear();
         navigationView.inflateMenu(R.menu.activity_main_drawer);
-
     }
 
     //Settaggio della finestra di avviso del salvataggio della Notepack

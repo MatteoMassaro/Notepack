@@ -75,7 +75,7 @@
                         android:layout_marginTop="5dp"
                         android:fontFamily="@font/robotoslab_extrabold"
                         android:text="@string/app_version"
-                        android:textColor="@color/light_black"
+                        android:textColor="?android:textColorPrimaryInverse"
                         android:textSize="15sp" />
 
                     <TextView
@@ -87,7 +87,7 @@
                         android:layout_marginTop="5dp"
                         android:fontFamily="@font/robotoslab_extrabold"
                         android:text="@string/app_creator"
-                        android:textColor="@color/light_black"
+                        android:textColor="?android:textColorPrimaryInverse"
                         android:textSize="15sp" />
 
                 </LinearLayout>

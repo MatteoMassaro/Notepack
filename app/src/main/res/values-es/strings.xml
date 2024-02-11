@@ -44,6 +44,7 @@
     <string name="notepack_saved">Notepack guardado</string>
     <string name="notepack_deleting_error">Error al eliminar el Notepack</string>
     <string name="notepack_updated">Notepack actualizado</string>
+    <string name="database_error">Error de la base de datos</string>
     <string name="order">Ordenar</string>
     <string name="order_by_category">Ordenar por categoría</string>
     <string name="order_by_date">Ordenar por fecha</string>

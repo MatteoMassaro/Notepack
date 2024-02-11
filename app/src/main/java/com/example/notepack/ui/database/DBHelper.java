@@ -15,9 +15,8 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase DB) {
         //Creazione delle tabelle del database
-        DB.execSQL("create table NotepacksDetails(id INT primary key, title TEXT unique, category TEXT, itemsTaken INT)");
+        DB.execSQL("create table NotepacksDetails(id INT primary key, title TEXT unique, category TEXT,itemsNumber INT, itemsTaken INT)");
         DB.execSQL("create table NotepacksCounter(number INT primary key)");
-        DB.execSQL("create table ItemsCounter(notepackId INT primary key, number INT)");
         DB.execSQL("create table NotepacksItems(itemId INT, notepackId INT, category INT, title TEXT, taken INT, primary key (itemId, notepackId))");
 
         //Inizializzazione del contatore delle Notepacks
@@ -31,17 +30,17 @@ public class DBHelper extends SQLiteOpenHelper {
         //Eliminazione delle tabelle per l'aggiornamento
         DB.execSQL("drop table if exists NotepacksDetails");
         DB.execSQL("drop table if exists NotepacksCounter");
-        DB.execSQL("drop table if exists ItemsCounter");
         DB.execSQL("drop table if exists NotepacksItems");
     }
 
     //Salvataggio delle informazioni delle Notepacks
-    public boolean saveNotepacksDetails(int id, String title, String category, int itemsTaken){
+    public boolean saveNotepacksDetails(int id, String title, String category,int itemsNumber, int itemsTaken){
         SQLiteDatabase DB = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("id", id);
         contentValues.put("title", title);
         contentValues.put("category", category);
+        contentValues.put("itemsNumber", itemsNumber);
         contentValues.put("itemsTaken", itemsTaken);
         long result = DB.insert("NotepacksDetails", null, contentValues);
         return result != -1;
@@ -58,27 +57,17 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     //Rimozione delle informazioni delle Notepacks
-    public boolean deleteNotepacksDetails(int id){
+    public boolean deleteNotepacksDetails(int notepackId, String notepackTitle){
         SQLiteDatabase DB = this.getWritableDatabase();
-        long result = DB.delete("NotepacksDetails", "id =?", new String[]{String.valueOf(id)});
-        long result1 = DB.delete("NotepacksItems", "notepackId =?",  new String[]{String.valueOf(id)});
-        long result2 = DB.delete("ItemsCounter", "notepackId =?",  new String[]{String.valueOf(id)});
-        return result != -1 && result1 != -1 && result2 != -1;
-    }
-
-    //Salvataggio del numero di items delle Notepacks
-    public void saveItemsNumber(int notepackId, int number){
-        SQLiteDatabase DB = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("notepackId", notepackId);
-        contentValues.put("number", number);
-        DB.insertWithOnConflict("ItemsCounter", null, contentValues, SQLiteDatabase.CONFLICT_IGNORE);
+        long result = DB.delete("NotepacksDetails", "title =?", new String[]{notepackTitle});
+        long result1 = DB.delete("NotepacksItems", "notepackId =?",  new String[]{String.valueOf(notepackId)});
+        return result != -1 && result1 != -1;
     }
 
     //Aggiornamento del numero di items delle Notepacks
     public void updateItemsNumber(int notepackId, int number){
         SQLiteDatabase DB = this.getWritableDatabase();
-        DB.execSQL("update ItemsCounter set number =" + number + " where notepackId =" + notepackId);
+        DB.execSQL("update NotepacksDetails set itemsNumber =" + number + " where id =" + notepackId);
     }
 
     //Salvataggio delle informazioni degli items delle Notepacks
@@ -106,6 +95,12 @@ public class DBHelper extends SQLiteOpenHelper {
         DB.update("NotepacksItems", contentValues, "itemId =? and notepackid=?", new String[]{String.valueOf(itemId), String.valueOf(notepackId)});
     }
 
+    //Rimozione delle informazioni degli items delle Notepacks
+    public void deleteNotepacksItems(int itemId){
+        SQLiteDatabase DB = this.getWritableDatabase();
+        DB.delete("NotepacksItems", "itemId =?", new String[]{String.valueOf(itemId)});
+    }
+
     //Incremento del numero delle Notepacks
     public void increaseNotepacksNumber(){
         SQLiteDatabase DB = this.getWritableDatabase();
@@ -125,9 +120,33 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     //Recupero dell'id delle Notepacks
-    public Cursor getNotepacksId(String title){
+    public Cursor getNotepacksId(){
+        SQLiteDatabase DB = this.getReadableDatabase();
+        return DB.rawQuery("select id from NotepacksDetails", null);
+    }
+
+    //Recupero degli stati degli switch degli items per notepackId
+    public Cursor getNotepacksItemsTakenById(int notepackId){
+        SQLiteDatabase DB = this.getReadableDatabase();
+        return DB.rawQuery("select taken from NotepacksItems where notepackId =" + notepackId,null);
+    }
+
+    //Recupero dell'id delle Notepacks per titolo
+    public Cursor getNotepacksIdByTitle(String title){
         SQLiteDatabase DB = this.getReadableDatabase();
         return DB.rawQuery("select id from NotepacksDetails where title =?", new String[]{title});
+    }
+
+    //Recupero del numero di items delle Notepacks ordinati per id
+    public Cursor getItemsNumberOrderedById(){
+        SQLiteDatabase DB = this.getReadableDatabase();
+        return DB.rawQuery("select itemsNumber from NotepacksDetails Order By id",null);
+    }
+
+    //Recupero degli items presi delle Notepacks ordinati per id
+    public Cursor getNotepacksItemsTakenOrderedById(){
+        SQLiteDatabase DB = this.getReadableDatabase();
+        return DB.rawQuery("select itemsTaken from NotepacksDetails Order By id", null);
     }
 
     //Recupero dei titoli delle Notepacks ordinati per id
@@ -142,6 +161,18 @@ public class DBHelper extends SQLiteOpenHelper {
         return DB.rawQuery("select category from NotepacksDetails Order By id",null);
     }
 
+    //Recupero del numero di items delle Notepacks ordinati per categoria
+    public Cursor getItemsNumberOrderedByCategory(){
+        SQLiteDatabase DB = this.getReadableDatabase();
+        return DB.rawQuery("select itemsNumber from NotepacksDetails Order By category",null);
+    }
+
+    //Recupero degli items presi delle Notepacks ordinati per categoria
+    public Cursor getNotepacksItemsTakenOrderedByCategory(){
+        SQLiteDatabase DB = this.getReadableDatabase();
+        return DB.rawQuery("select itemsTaken from NotepacksDetails Order By category", null);
+    }
+
     //Recupero dei titoli delle Notepacks ordinati per categoria
     public Cursor getNotepacksTitleOrderedByCategory(){
         SQLiteDatabase DB = this.getReadableDatabase();
@@ -152,6 +183,18 @@ public class DBHelper extends SQLiteOpenHelper {
     public Cursor getNotepacksCategoryOrderedByCategory(){
         SQLiteDatabase DB = this.getReadableDatabase();
         return DB.rawQuery("select category from NotepacksDetails Order By category",null);
+    }
+
+    //Recupero del numero di items delle Notepacks ordinati per titolo
+    public Cursor getItemsNumberOrderedByTitle(){
+        SQLiteDatabase DB = this.getReadableDatabase();
+        return DB.rawQuery("select itemsNumber from NotepacksDetails Order By title",null);
+    }
+
+    //Recupero degli items presi delle Notepacks ordinati per titolo
+    public Cursor getNotepacksItemsTakenOrderedByTitle(){
+        SQLiteDatabase DB = this.getReadableDatabase();
+        return DB.rawQuery("select itemsTaken from NotepacksDetails Order By title", null);
     }
 
     //Recupero dei titoli delle Notepacks ordinati per titolo
@@ -166,34 +209,28 @@ public class DBHelper extends SQLiteOpenHelper {
         return DB.rawQuery("select category from NotepacksDetails Order By title",null);
     }
 
-    //Recupero degli items presi delle Notepacks
-    public Cursor getNotepacksItemsTaken(int notepackID){
+    //Recupero degli items presi delle Notepacks per id
+    public Cursor getNotepacksDetailsItemsTakenById(int notepackId){
         SQLiteDatabase DB = this.getReadableDatabase();
-        return DB.rawQuery("select itemsTaken from NotepacksDetails where id=?",new String[]{String.valueOf(notepackID)});
+        return DB.rawQuery("select itemsTaken from NotepacksDetails where id =" + notepackId, null);
     }
 
-    //Recupero del numero di items delle Notepacks
-    public Cursor getItemsNumber(int notepackId){
+    //Recupero del numero di items delle Notepacks per notepackId
+    public Cursor getItemsNumberById(int notepackId){
         SQLiteDatabase DB = this.getReadableDatabase();
-        return DB.rawQuery("select number from ItemsCounter where notepackId =" + notepackId,null);
+        return DB.rawQuery("select itemsNumber from NotepacksDetails where id =" + notepackId,null);
     }
 
-    //Recupero delle categorie degli items
-    public Cursor getItemsCategory(int notepackId){
+    //Recupero delle categorie degli items per notepackId
+    public Cursor getItemsCategoryById(int notepackId){
         SQLiteDatabase DB = this.getReadableDatabase();
         return DB.rawQuery("select category from NotepacksItems where notepackId =" + notepackId + " Order By notepackId, itemId",null);
     }
 
-    //Recupero dei titoli degli items
-    public Cursor getItemsTitle(int notepackId){
+    //Recupero dei titoli degli items per notepackId
+    public Cursor getItemsTitleById(int notepackId){
         SQLiteDatabase DB = this.getReadableDatabase();
         return DB.rawQuery("select title from NotepacksItems where notepackId =" + notepackId + " Order By notepackId, itemId",null);
-    }
-
-    //Recupero degli stati degli switch degli items
-    public Cursor getItemsTaken(int notepackId){
-        SQLiteDatabase DB = this.getReadableDatabase();
-        return DB.rawQuery("select taken from NotepacksItems where notepackId =" + notepackId + " Order By notepackId, itemId",null);
     }
 
 }

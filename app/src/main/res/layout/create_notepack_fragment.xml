@@ -76,7 +76,6 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="550dp"
-        android:background="@color/white"
         android:contentDescription="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -86,7 +85,6 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/notepack_item_background"
-            android:divider="@drawable/notepack_items_divider"
             android:elevation="8dp"
             android:orientation="vertical"
             android:showDividers="middle">
@@ -116,9 +114,10 @@
             android:layout_height="60dp"
             android:layout_gravity="center"
             android:layout_marginStart="25dp"
-            android:backgroundTint="@color/lime_green"
+            android:backgroundTint="@color/gray"
             android:elevation="6dp"
-            android:text="@string/save" />
+            android:text="@string/save"
+            android:enabled="false"/>
 
     </LinearLayout>
 
