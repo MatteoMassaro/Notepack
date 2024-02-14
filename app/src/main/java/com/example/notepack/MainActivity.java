@@ -40,6 +40,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.notepack.databinding.ActivityMainBinding;
+import com.example.notepack.ui.database.DBHelper;
 import com.example.notepack.ui.notepack.CreateNotepackFragment;
 import com.example.notepack.ui.notepack.NotepackFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
 
     Animation circleExplosion, textExplosion, circleImplosion, textImplosion;
     CardView cardViewVacation, cardViewBusinessTrip, cardViewSchoolTrip, cardViewCustom, cardViewItalian, cardViewEnglish, cardViewFrench, cardViewSpanish, cardViewGerman, cardViewInstagram, cardviewEmail, cardViewWebsite;
+    DBHelper DB;
+
     DrawerLayout drawerLayout;
     Handler handler;
     LinearLayout notepackLinearLayout;
@@ -98,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
         circleSchoolTrip = binding.appBarMain.circleSchoolTrip;
         circleCustom = binding.appBarMain.circleCustom;
         toolbar = binding.appBarMain.toolbar;
+        DB = new DBHelper(this);
         handler = new Handler();
         fabVisibilityCounter = 0;
         goToNotepackFragmentCheck = false;
@@ -601,7 +605,9 @@ public class MainActivity extends AppCompatActivity {
         menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         menuDialog.show();
         SharedPreferences sharedPreferences = getSharedPreferences("Selected language", MODE_PRIVATE);
+
         String languageCode = sharedPreferences.getString("Language","it");
+
         SharedPreferences.Editor editor = sharedPreferences.edit();
         cardViewItalian = menuDialog.findViewById(R.id.cardviewItalian);
         cardViewEnglish = menuDialog.findViewById(R.id.cardviewEnglish);
