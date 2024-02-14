@@ -191,8 +191,6 @@ public class CreateNotepackFragment extends Fragment {
                 notepacksCounter = cursor1.getInt(0) + 1;
             }else{
                 notepacksCounter = 0;
-                text.setText(getString(R.string.database_error));
-                toast.show();
             }
             notepackId = notepacksCounter;
             itemsCounter = 0;
